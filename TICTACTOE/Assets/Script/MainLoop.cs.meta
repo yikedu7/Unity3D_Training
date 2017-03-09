@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5f29309b1ba4d114b840395474757dff
+timeCreated: 1488755021
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - OPrefab: {fileID: 1577198156223088, guid: 73caa07ce6cf4b645899df5935cfcf5f, type: 2}
+  - XPrefab: {fileID: 1474144813590194, guid: bec3ca02f133b0441a918b4042584016, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

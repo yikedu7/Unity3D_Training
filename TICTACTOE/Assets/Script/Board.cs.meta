@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2fcb0b928ce30d54485e3504a8fd1490
+timeCreated: 1488754995
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - GridPrefab: {fileID: 1239422871060304, guid: b7683a48b0899194e82274f546121fa3,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
