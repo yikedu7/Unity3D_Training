@@ -20,15 +20,15 @@ public class PersonModel {
     PersonStyle _IPersonStyle;
     public PersonStyle IPersonStyle
     {
-        get { return IPersonStyle; }
-        set { IPersonStyle = value; }
+        get { return _IPersonStyle; }
+        set { _IPersonStyle = value; }
     }
 
     PersonState _IPersonState;
     public PersonState IPersonState
     {
-        get { return IPersonState; }
-        set { IPersonState = value; }
+        get { return _IPersonState; }
+        set { _IPersonState = value; }
     }
 
 }

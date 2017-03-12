@@ -1,10 +1,21 @@
 fileFormatVersion: 2
 guid: b9fed9056c9b58e47a33fd48d9a54f3c
-timeCreated: 1489219410
+timeCreated: 1489333279
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - backgroundPrefab: {fileID: 1798564549516430, guid: ecf72c38ffd55af44b1cf39b8d54f10e,
+      type: 2}
+  - boatPrefab: {fileID: 1164413881669466, guid: 2e8b9a2ba0092304b8ce331622759e3c,
+      type: 2}
+  - zombiePrefab: {fileID: 1253009292536484, guid: 349c3546e6c04524283b8ac99e84e2eb,
+      type: 2}
+  - sunflowerPrefab: {fileID: 1811515293935438, guid: c5d21bc05fd76a44bbb2276dcd57ac60,
+      type: 2}
+  - GoPrefab: {fileID: 1926491994860756, guid: cdc82179bcd4c3642b417cdca25e2dfa, type: 2}
+  - boat: {instanceID: 0}
+  - go: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

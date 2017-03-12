@@ -16,60 +16,110 @@ public enum BoatState
 }
 
 public class SenceModel  {
+    
+    const int objCout = 6;//六个游戏对象
 
-    const int objCout = 6;
-
-    GameState IGameState = GameState.ing;
+    GameState IGameState;
     PersonModel[] allPerson = new PersonModel[objCout];
-    BoatState IBoatState = BoatState.up;
 
+    //初始化
+    public void Reset()
+    {
+        IGameState = GameState.ing;
+        for (int i = 0; i < objCout; i++)
+        {
+            allPerson[i] = new PersonModel();
+            allPerson[i].IPersonState = PersonState.up;
+            if (i < 3)
+            {
+                allPerson[i].IPersonStyle = PersonStyle.sunflower;
+            }
+            else
+            {
+                allPerson[i].IPersonStyle = PersonStyle.zombie;
+            }
+        }
+    }
+    //get访问器获取指定游戏对象
+    public PersonModel getPersonModel(int num)
+    {
+        return allPerson[num];
+    }
+
+    BoatState _IBoatState = BoatState.up;
+
+    public BoatState IBoatState
+    {
+        get { return _IBoatState; }
+        set { _IBoatState = value; }
+    }
+
+    public int onBoatCout()
+    {
+        int onBoatCout = 0;
+        foreach (var person in allPerson)
+        {
+            if (person.IPersonState == PersonState.onBoat)
+                onBoatCout++;
+        }
+        return onBoatCout;
+    }
+
+    //判断游戏状态
     public GameState checkGameState()
     {
-        int upCout = 0 , downCout = 0;
+        //声明四个变量储存植物和僵尸的数量
+        int upSunflower = 0, downSunflower = 0;
+        int upZombie = 0, downZombie = 0;
 
-        foreach(var person in allPerson)
+        //遍历对象数组
+        foreach (var person in allPerson)
         {
-            if (IBoatState == BoatState.up)
+            if (_IBoatState == BoatState.up)
             {
                 if (person.IPersonState != PersonState.down)
                 {
-                    
+                    if (person.IPersonStyle == PersonStyle.sunflower)
+                        upSunflower++;
+                    else
+                        upZombie++;
                 }
                 else if (person.IPersonState == PersonState.down)
                 {
-                   
+                    if (person.IPersonStyle == PersonStyle.sunflower)
+                        downSunflower++;
+                    else
+                        downZombie++;
                 }
             }
-            if (IBoatState == BoatState.down)
+            if (_IBoatState == BoatState.down)
             {
                 if (person.IPersonState != PersonState.up)
                 {
                     if (person.IPersonStyle == PersonStyle.sunflower)
-                        downCout++;
+                        downSunflower++;
                     else
-                        downCout--;
+                        downZombie++;
                 }
                 else if (person.IPersonState == PersonState.up)
                 {
                     if (person.IPersonStyle == PersonStyle.sunflower)
-                        upCout++;
+                        upSunflower++;
                     else
-                        upCout--;
+                        upZombie++;
                 }
             }
         }
-
-        if (upCout < 0 || downCout < 0)
-        {
+        //判断游戏状态
+        if ((upZombie > upSunflower && upSunflower != 0) ||
+                  downZombie > downSunflower && downSunflower != 0)
             return GameState.fail;
+
+        foreach (var person in allPerson)
+        {
+            if (person.IPersonState == PersonState.up || person.IPersonState == PersonState.onBoat)
+                return GameState.ing;
         }
-        else if ()
-
-        return 0;
-    }
-
-    public void changBoatState()
-    {
-        IBoatState = 1 - IBoatState;
+        return GameState.win;
     }
 }
