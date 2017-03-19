@@ -6,18 +6,9 @@ public class Person : MonoBehaviour {
 
     public GameSceneController gameSceneController;
     public int num;
-
-    Vector3 start;
-    public Vector3 getStart()
-    {
-        return start;
-    }
-    Vector3 arrive;
-    public Vector3 getArrive()
-    {
-        return arrive;
-    }
-
+    public Vector3 start { get; private set; }
+    public Vector3 arrive { get; private set; }
+   
     private void OnMouseDown()
     {
         gameSceneController.PersonOnclick(this);

@@ -15,20 +15,17 @@ public enum PersonState
     down = 2
 }
 
+public enum onBoatState
+{
+    not = 0,
+    left = 1,
+    right = 2
+}
+
 public class PersonModel {
 
-    PersonStyle _IPersonStyle;
-    public PersonStyle IPersonStyle
-    {
-        get { return _IPersonStyle; }
-        set { _IPersonStyle = value; }
-    }
-
-    PersonState _IPersonState;
-    public PersonState IPersonState
-    {
-        get { return _IPersonState; }
-        set { _IPersonState = value; }
-    }
+    public PersonStyle IPersonStyle { get; set; }
+    public PersonState IPersonState { get; set; }
+    public onBoatState IOnBoatState { get; set; }
 
 }

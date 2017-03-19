@@ -17,16 +17,15 @@ public enum BoatState
 
 public class SenceModel  {
     
-    const int objCout = 6;//六个游戏对象
-
-    GameState IGameState;
-    PersonModel[] allPerson = new PersonModel[objCout];
+    const int OBJECTNUM = 6;//六个游戏对象
+    public BoatState IBoatState { get; set; }
+    PersonModel[] allPerson;
 
     //初始化
     public void Reset()
     {
-        IGameState = GameState.ing;
-        for (int i = 0; i < objCout; i++)
+        allPerson = new PersonModel[OBJECTNUM];
+        for (int i = 0; i < OBJECTNUM; i++)
         {
             allPerson[i] = new PersonModel();
             allPerson[i].IPersonState = PersonState.up;
@@ -40,20 +39,14 @@ public class SenceModel  {
             }
         }
     }
+
     //get访问器获取指定游戏对象
     public PersonModel getPersonModel(int num)
     {
         return allPerson[num];
     }
 
-    BoatState _IBoatState = BoatState.up;
-
-    public BoatState IBoatState
-    {
-        get { return _IBoatState; }
-        set { _IBoatState = value; }
-    }
-
+    //关于船的判断方法
     public int onBoatCout()
     {
         int onBoatCout = 0;
@@ -63,6 +56,16 @@ public class SenceModel  {
                 onBoatCout++;
         }
         return onBoatCout;
+    }
+    public bool ifOnRight()
+    {
+        bool onRight = false;
+        foreach (var person in allPerson)
+        {
+            if (person.IOnBoatState == onBoatState.right)
+                onRight = true;
+        }
+        return onRight;
     }
 
     //判断游戏状态
@@ -75,7 +78,7 @@ public class SenceModel  {
         //遍历对象数组
         foreach (var person in allPerson)
         {
-            if (_IBoatState == BoatState.up)
+            if (IBoatState == BoatState.up)
             {
                 if (person.IPersonState != PersonState.down)
                 {
@@ -92,7 +95,7 @@ public class SenceModel  {
                         downZombie++;
                 }
             }
-            if (_IBoatState == BoatState.down)
+            if (IBoatState == BoatState.down)
             {
                 if (person.IPersonState != PersonState.up)
                 {
