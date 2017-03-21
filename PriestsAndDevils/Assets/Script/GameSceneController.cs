@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using Com.Action;
 
 
-public class GameSceneController : MonoBehaviour {
+public class GameSceneController : MonoBehaviour
+{
     const float DISTANCE = 1.2f;
     const int OBJECTCOUNT = 6;
     public GameObject backgroundPrefab;
@@ -77,7 +78,7 @@ public class GameSceneController : MonoBehaviour {
         BoatState _boatState = _senceModel.IBoatState;
         int _onBoatCout = _senceModel.onBoatCout();
 
-        if (_boatState == BoatState.up && _personState == PersonState.up || _boatState == BoatState.down && _personState == PersonState.down)
+        if (_boatState == BoatState.up && _personState == PersonState.up)
         {
             if (_onBoatCout < 2)
             {
@@ -85,69 +86,53 @@ public class GameSceneController : MonoBehaviour {
                 _personModel.IPersonState = PersonState.onBoat;
                 if (_onBoatCout == 0 || (_onBoatCout == 1 && _senceModel.ifOnRight()))
                 {
-                    _actionManager.moveToLeft(obj);
+                    _actionManager.moveToLeftUp(obj);
                     _personModel.IOnBoatState = onBoatState.left;
                 }
                 else if (_onBoatCout == 1 && !(_senceModel.ifOnRight()))
                 {
-                    _actionManager.moveToRight(obj);
+                    _actionManager.moveToRightUp(obj);
+                    _personModel.IOnBoatState = onBoatState.right;
+                }
+            }
+        }
+        if (_boatState == BoatState.down && _personState == PersonState.down)
+        {
+            if (_onBoatCout < 2)
+            {
+                _person.transform.SetParent(boat.transform);
+                _personModel.IPersonState = PersonState.onBoat;
+                if (_onBoatCout == 0 || (_onBoatCout == 1 && _senceModel.ifOnRight()))
+                {
+                    _actionManager.moveToLeftDown(obj);
+                    _personModel.IOnBoatState = onBoatState.left;
+                }
+                else if (_onBoatCout == 1 && !(_senceModel.ifOnRight()))
+                {
+                    _actionManager.moveToRightDown(obj);
                     _personModel.IOnBoatState = onBoatState.right;
                 }
             }
         }
         if (_personState == PersonState.onBoat)
         {
-            _person.transform.SetParent(gameObject.transform);
             if (_boatState == BoatState.up)
             {
                 _actionManager.moveToStart(obj);
                 _personModel.IPersonState = PersonState.up;
+                _personModel.IOnBoatState = onBoatState.not;
             }
             if (_boatState == BoatState.down)
             {
                 _actionManager.moveToArrive(obj);
                 _personModel.IPersonState = PersonState.down;
+                _personModel.IOnBoatState = onBoatState.not;
                 if (_senceModel.checkGameState() == GameState.win)
                 {
 
                 }
             }
-        }
-
-        //if (_boatState == BoatState.up && _personState == PersonState.up || _boatState == BoatState.down && _personState == PersonState.down)
-        //{
-        //    if (_onBoatCout < 2)
-        //    {
-        //        _person.transform.SetParent(boat.transform);
-        //        _personModel.IPersonState = PersonState.onBoat;
-        //    }
-        //    if (_onBoatCout == 0)
-        //    {
-        //        _person.transform.localPosition = new Vector3(-0.4f, 0.4f, 0);
-        //    }
-        //    if (_onBoatCout == 1)
-        //    {
-        //        _person.transform.localPosition = new Vector3(0.4f, 0.4f, 0);
-        //    }
-        //}
-        if (_personState == PersonState.onBoat)
-        {
-            if (_boatState == BoatState.up)
-            {
-                _person.transform.SetParent(gameObject.transform);
-                _person.transform.localPosition = _person.start;
-                _personModel.IPersonState = PersonState.up;
-            }
-            if (_boatState == BoatState.down)
-            {
-                _person.transform.SetParent(gameObject.transform);
-                _person.transform.localPosition = _person.arrive;
-                _personModel.IPersonState = PersonState.down;
-                if (_senceModel.checkGameState() == GameState.win)
-                {
-
-                }
-            }
+            _person.transform.SetParent(gameObject.transform);
         }
     }
 
@@ -157,10 +142,10 @@ public class GameSceneController : MonoBehaviour {
         int _onBoatCout = _senceModel.onBoatCout();
         if (_onBoatCout != 0)
         {
-            if (_senceModel.IBoatState == BoatState.up) 
-                boat.transform.localPosition = new Vector3(-2,-1.4f,0);
+            if (_senceModel.IBoatState == BoatState.up)
+                _actionManager.boatMoveDown(boat);
             else
-                boat.transform.localPosition = new Vector3(-2, -0.4f, 0);
+                _actionManager.boatMoveUp(boat);
             _senceModel.IBoatState = 1 - _senceModel.IBoatState;
         }
         if (_senceModel.checkGameState() == GameState.fail)
@@ -169,7 +154,8 @@ public class GameSceneController : MonoBehaviour {
         }
     }
 
-    void Start () {
+    void Start()
+    {
         Reset();
-	}
+    }
 }

@@ -14,9 +14,13 @@ namespace Com.Action
     public class ActionManager : System.Object
     {
         private static ActionManager _IActionManager;
-        static Vector3 LEFT = new Vector3(-0.4f, 0.4f, 0);
-        static Vector3 RIGHT = new Vector3(0.4f, 0.4f, 0);
-        static float SPEED = 5f;
+        static Vector3 LEFTUP = new Vector3(-2.5f, 0.2f, 0);
+        static Vector3 RIGHTUP = new Vector3(-1.5f, 0.2f, 0);
+        static Vector3 LEFTDOWN = new Vector3(-2.5f, -0.8f, 0);
+        static Vector3 RIGHTDOWN = new Vector3(-1.5f, -0.8f, 0);
+        static Vector3 BOATUP = new Vector3(-2, -0.4f, 0);
+        static Vector3 BOATDOWN = new Vector3(-2, -1.4f, 0);
+        static float SPEED = 4f;
 
         public static ActionManager GetInstance()
         {
@@ -27,23 +31,39 @@ namespace Com.Action
             return _IActionManager;
         }
 
-        public void moveToLeft(GameObject obj)
+        public void moveToLeftUp(GameObject obj)
         {
             MoveToAction action = obj.AddComponent<MoveToAction>();
-            //while (action._actionState == ActionState.ing)
-                action.setMoveTo(LEFT, SPEED);
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(LEFTUP, SPEED);
         }
 
-        public void moveToRight(GameObject obj)
+        public void moveToRightUp(GameObject obj)
         {
             MoveToAction action = obj.AddComponent<MoveToAction>();
-                action.setMoveTo(RIGHT, SPEED);
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(RIGHTUP, SPEED);
+        }
+
+        public void moveToLeftDown(GameObject obj)
+        {
+            MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(LEFTDOWN, SPEED);
+        }
+
+        public void moveToRightDown(GameObject obj)
+        {
+            MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(RIGHTDOWN, SPEED);
         }
 
         public void moveToStart(GameObject obj)
         {
             Vector3 start = obj.GetComponent<Person>().start;
             MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
                 action.setMoveTo(start, SPEED);
         }
 
@@ -51,7 +71,22 @@ namespace Com.Action
         {
             Vector3 arrive = obj.GetComponent<Person>().arrive;
             MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
                 action.setMoveTo(arrive, SPEED);
+        }
+
+        public void boatMoveDown(GameObject obj)
+        {
+            MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(BOATDOWN, SPEED);
+        }
+
+        public void boatMoveUp(GameObject obj)
+        {
+            MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(BOATUP, SPEED);
         }
     }
 
@@ -67,15 +102,18 @@ namespace Com.Action
     {
         Vector3 _target;
         float _speed;
-        public ActionState _actionState { get; private set; }
+        ActionState _actionState = ActionState.ing;
+        public ActionState actionState
+        {
+            get { return _actionState; }
+            private set { _actionState = value; }
+        }
 
-        private MoveToAction _IMoveToAction = new MoveToAction();
 
         public void setMoveTo(Vector3 target, float speed)
         {
             _target = target;
             _speed = speed;
-            _actionState = ActionState.ing;
         }
 
         private void Update()
@@ -83,13 +121,13 @@ namespace Com.Action
             float step = _speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, _target, step);
 
-            if (transform.localPosition == _target)
+            if (transform.position == _target)
             {
-                if (_actionState == ActionState.ing)
+                if (actionState == ActionState.ing)
                 {
-                    _actionState = ActionState.no;
+                    actionState = ActionState.no;
                 }
-                free();
+                Destroy(this);
             }
         }
     }

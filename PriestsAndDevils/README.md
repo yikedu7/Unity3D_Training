@@ -1,5 +1,12 @@
 # README
 
+###  V2.0更新说明
+
+1. 使用动作管理器，实现动作分离
+2. 修改了精灵上船位置的BUG
+
+------
+
 ### 游戏简介
 
 ​	《植物与僵尸》是一款模仿《牧师与恶魔》的益智小游戏。规则与《牧师与恶魔》相似，只不过牧师在游戏中变成了植物，而恶魔变成了僵尸。
@@ -16,13 +23,9 @@
 >
 > 操作方法：点击植物或僵尸使其上船，点击GO按键使船移动。
 
-​	游戏截图：
+​	游戏效果：
 
-![begin](http://ompnv884d.bkt.clouddn.com/%E6%8D%95%E8%8E%B7.JPG)
-
-![in Game](http://ompnv884d.bkt.clouddn.com/%E6%8D%95%E8%8E%B71.JPG)
-
-![win](http://ompnv884d.bkt.clouddn.com/%E6%8D%95%E8%8E%B72.JPG)
+![](http://ompnv884d.bkt.clouddn.com/GAME.gif)
 
 ### 参考资料
 
@@ -34,7 +37,7 @@
 
 ### 游戏架构
 
-​	游戏采用MVC架构来设计，游戏目录如下：
+​	游戏采用MVC架构来设计，主要目录如下：
 
 ![](http://ompnv884d.bkt.clouddn.com/%E6%8D%95%E8%8E%B73.JPG)
 
@@ -188,6 +191,81 @@ namespace Com.Mygame {
 #### （三）时时刻刻注意实例化与初始化
 
 ​	基本上，每个类都需要一个初始化函数，来初始化所有字段属性。这一点新手开发者虽然知道但常常会遗忘。其次，对于某些类如果没有设置声明时自动初始化，要记得实例化的同时手动做好初始化。这种问题虽然能在后期Debug中比较容易地发现，但是极大地影响开发者的效率。
+
+------
+
+## V2.0相关
+
+### 关于动作分离
+
+​	使用简单的工厂模式，其原理时：添加动作管理器`ActionManager`，`ActionManager`设置分配动作给游戏对象的方法（`moveToLeftUp`、`moveToRightUp`等）。具体的分配动作的方法是：自定义一个对象组件`MoveToAction`，通过向对象添加组件和删除组件的方式来控制游戏对象的动作进行和动作结束。动作分离的好处是：代码结构清晰，`GameSceneController`不再需要了解动作的具体实现，而只需要通知`ActionManager`想特定的对象添加特定的动作即可。在大型的游戏工程中，一个动作的实现往往是相对复杂的，所以动作分离十分重要。
+
+### 实现过程
+
+#### （一）定义`ActionManager`类
+
+​	定义`ActionManager`类，并添加需要用到的静态字段，用于表示动作的到达位置与速度。
+
+```c#
+    public class ActionManager : System.Object
+    {
+        private static ActionManager _IActionManager;
+        static Vector3 LEFTUP = new Vector3(-2.5f, 0.2f, 0);
+        static Vector3 RIGHTUP = new Vector3(-1.5f, 0.2f, 0);
+        static Vector3 LEFTDOWN = new Vector3(-2.5f, -0.8f, 0);
+        static Vector3 RIGHTDOWN = new Vector3(-1.5f, -0.8f, 0);
+        static Vector3 BOATUP = new Vector3(-2, -0.4f, 0);
+        static Vector3 BOATDOWN = new Vector3(-2, -1.4f, 0);
+        static float SPEED = 4f;
+    }
+```
+
+​
+
+#### （二）自定义`MoveToAction`组件
+
+​	自定义`MoveToAction`动作组件，其主要功能是包含一个实现让特定对象移动到特定地点的动作。需要注意的是，在工程中年我们常常先自定义一个动作基类，因为在游戏工程中往往需要各种各样的动作，我们将所有的动作定义为动作基类的子类，这符合封装的原则。`MoveToAction`需要实现两个主要方法，一个是`setMoveTo(Vector3 target, float speed)`，用于设置动作的目标位置与移动速度，另一个是重写`MonoBehaviour`的`Update()`方法，该方法会在游戏的每一帧执行，用以动作的具体实现和检查动作是否完成。
+
+```c#
+	public class MyAction : MonoBehaviour
+    {
+       //...
+    }
+
+    public class MoveToAction : MyAction
+    {
+        Vector3 _target;
+        float _speed;
+        ActionState _actionState = ActionState.ing；
+
+        public void setMoveTo(Vector3 target, float speed)
+        {
+            //do
+        }
+
+        private void Update()
+        {
+            //do
+        }
+    }
+```
+
+
+
+#### （三）应用动作函数
+
+​	在`ActionManager`中实现你所需要的各种动作的应用，下面是一个例子。场景控制类只需调用这些动作应用函数即可实现对象的动作：
+
+```c#
+	public void moveToLeftUp(GameObject obj)
+        {
+            MoveToAction action = obj.AddComponent<MoveToAction>();
+            if (action.actionState == ActionState.ing)
+                action.setMoveTo(LEFTUP, SPEED);
+        }
+```
+
+------
 
 ### 写在后面
 
