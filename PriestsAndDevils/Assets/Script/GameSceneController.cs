@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Com.Action;
+
 
 public class GameSceneController : MonoBehaviour {
     const float DISTANCE = 1.2f;
@@ -14,6 +16,7 @@ public class GameSceneController : MonoBehaviour {
     public GameObject boat;
     public GameObject go;
     SenceModel _senceModel;
+    ActionManager _actionManager = ActionManager.GetInstance();
 
     //重置游戏
     public void Reset()
@@ -68,6 +71,7 @@ public class GameSceneController : MonoBehaviour {
     //处理点击精灵事件
     public void PersonOnclick(Person _person)
     {
+        GameObject obj = _person.gameObject;
         PersonModel _personModel = _senceModel.getPersonModel(_person.num);
         PersonState _personState = _personModel.IPersonState;
         BoatState _boatState = _senceModel.IBoatState;
@@ -81,12 +85,12 @@ public class GameSceneController : MonoBehaviour {
                 _personModel.IPersonState = PersonState.onBoat;
                 if (_onBoatCout == 0 || (_onBoatCout == 1 && _senceModel.ifOnRight()))
                 {
-                    //moveToLeft(_person);
+                    _actionManager.moveToLeft(obj);
                     _personModel.IOnBoatState = onBoatState.left;
                 }
                 else if (_onBoatCout == 1 && !(_senceModel.ifOnRight()))
                 {
-                    //moveToRight(_person);
+                    _actionManager.moveToRight(obj);
                     _personModel.IOnBoatState = onBoatState.right;
                 }
             }
@@ -96,12 +100,12 @@ public class GameSceneController : MonoBehaviour {
             _person.transform.SetParent(gameObject.transform);
             if (_boatState == BoatState.up)
             {
-                //moveToStart(_person);
+                _actionManager.moveToStart(obj);
                 _personModel.IPersonState = PersonState.up;
             }
             if (_boatState == BoatState.down)
             {
-                //moveToArrive(_person);
+                _actionManager.moveToArrive(obj);
                 _personModel.IPersonState = PersonState.down;
                 if (_senceModel.checkGameState() == GameState.win)
                 {
@@ -126,25 +130,25 @@ public class GameSceneController : MonoBehaviour {
         //        _person.transform.localPosition = new Vector3(0.4f, 0.4f, 0);
         //    }
         //}
-        //if (_personState == PersonState.onBoat)
-        //{
-        //    if (_boatState == BoatState.up)
-        //    {
-        //        _person.transform.SetParent(gameObject.transform);
-        //        _person.transform.localPosition = _person.start;
-        //        _personModel.IPersonState = PersonState.up;
-        //    }
-        //    if (_boatState == BoatState.down)
-        //    {
-        //        _person.transform.SetParent(gameObject.transform);
-        //        _person.transform.localPosition = _person.arrive;
-        //        _personModel.IPersonState = PersonState.down;
-        //        if (_senceModel.checkGameState() == GameState.win)
-        //        {
+        if (_personState == PersonState.onBoat)
+        {
+            if (_boatState == BoatState.up)
+            {
+                _person.transform.SetParent(gameObject.transform);
+                _person.transform.localPosition = _person.start;
+                _personModel.IPersonState = PersonState.up;
+            }
+            if (_boatState == BoatState.down)
+            {
+                _person.transform.SetParent(gameObject.transform);
+                _person.transform.localPosition = _person.arrive;
+                _personModel.IPersonState = PersonState.down;
+                if (_senceModel.checkGameState() == GameState.win)
+                {
 
-        //        }
-        //    }
-        //}
+                }
+            }
+        }
     }
 
     //点击GO按钮

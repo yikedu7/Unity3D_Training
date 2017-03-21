@@ -75,9 +75,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Script\ActionManager.cs" />
     <Compile Include="Assets\Script\GameSceneController.cs" />
     <Compile Include="Assets\Script\GoClick.cs" />
-    <Compile Include="Assets\Script\NewBehaviourScript.cs" />
     <Compile Include="Assets\Script\Person.cs" />
     <Compile Include="Assets\Script\PersonModel.cs" />
     <Compile Include="Assets\Script\SenceModel.cs" />
