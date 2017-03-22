@@ -25,7 +25,7 @@
 
 ​	游戏效果：
 
-![](http://ompnv884d.bkt.clouddn.com/GAME.gif)
+![](http://ompnv884d.bkt.clouddn.com/GAME.gif-1)
 
 ### 参考资料
 
