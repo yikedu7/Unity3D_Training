@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Easy Factory Method.unity
+  isLoaded: 1
+  isActive: 1
