@@ -14,7 +14,7 @@ public class UserInterface : MonoBehaviour
 
     IUserInterface _uerInterface;
     IQueryStatus _queryStatus;
-
+    IScore _changeScore;
 
     // Use this for initialization
     void Start()
@@ -28,6 +28,7 @@ public class UserInterface : MonoBehaviour
         _scenceStatus = ScenceStatus.waiting;
         _uerInterface = GameScenceController.getGSController() as IUserInterface;
         _queryStatus = GameScenceController.getGSController() as IQueryStatus;
+        _changeScore = GameScenceController.getGSController() as IScore;
     }
 
     // Update is called once per frame
@@ -35,6 +36,7 @@ public class UserInterface : MonoBehaviour
     {
         _gameStatus = _queryStatus.queryGameStatus();
         _scenceStatus = _queryStatus.queryScenceStatus();
+
         if (_gameStatus == GameStatus.ing)
         {
             if (_scenceStatus == ScenceStatus.waiting && Input.GetKeyDown("space"))
@@ -48,6 +50,7 @@ public class UserInterface : MonoBehaviour
                 if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.tag == "Disk")
                 {
                     _uerInterface.destroyDisk(hit.collider.gameObject);
+                    _changeScore.addScore();
                 }
             }
         }

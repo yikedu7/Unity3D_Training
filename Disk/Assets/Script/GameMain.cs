@@ -43,7 +43,7 @@ namespace Com.Manager
         int getScore();
     }
 
-    public class GameScenceController : IUserInterface, IQueryStatus, setStatus
+    public class GameScenceController : IUserInterface, IQueryStatus, setStatus, IScore
     {
         public int sendDiskCount { get; private set; }
         private static GameScenceController _gameScenceController;
@@ -77,6 +77,12 @@ namespace Com.Manager
 
         public void setGameStatus(GameStatus _gameStatus) { this._gameStatus = _gameStatus; }
         public void setScenceStatus(ScenceStatus _scenceStatus) { this._scenceStatus = _scenceStatus; }
+
+        public void addScore() { GameModel.getGameModel().addScore(); }
+        public void subScore() { GameModel.getGameModel().subScore(); }
+        public int getScore() { return GameModel.getGameModel().score; }
+
+        public void update() { _scence.scenceUpdate(); }
     }
 }
 

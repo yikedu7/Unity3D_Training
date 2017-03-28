@@ -22,18 +22,18 @@ public class Scence : MonoBehaviour
         this.round = round;
         this.diskCount = round;
         this.diskScale = 1;
-        this.diskSpeed = 0.2f;
+        this.diskSpeed = 0.1f;
         if (round % 2 == 1)
         {
             this.diskColor = Color.red;
             this.startPosition = new Vector3(-5f, 3f, -15f);
-            this.startDiretion = new Vector3(3f, 5f, 5f);
+            this.startDiretion = new Vector3(3f, 8f, 5f);
         }
         else
         {
             this.diskColor = Color.green;
             this.startPosition = new Vector3(5f, 3f, -15f);
-            this.startDiretion = new Vector3(-3f, 5f, 5f);
+            this.startDiretion = new Vector3(-3f, 8f, 5f);
         }
         for (int i = 1; i < round; i++)
         {
@@ -48,7 +48,6 @@ public class Scence : MonoBehaviour
         this.Reset(round);
         for (int i = 0; i < usingDisks.Count; i++)
         {
-            Debug.Log("Hello");
             var localScale = usingDisks[i].transform.localScale;
             usingDisks[i].transform.localScale = new Vector3(localScale.x * diskScale, localScale.y * diskScale, localScale.z * diskScale);
             usingDisks[i].GetComponent<Renderer>().material.color = diskColor;
@@ -69,6 +68,12 @@ public class Scence : MonoBehaviour
         disk.transform.position = new Vector3(0f, -99f, 0f);
     }
 
+    public void scenceUpdate()
+    {
+        round++;
+        Reset(round);
+    }
+
     private void Start()
     {
         this.round = 1;
@@ -84,6 +89,7 @@ public class Scence : MonoBehaviour
                 if (usingDisks[i].transform.position.y <= usingDisks[i].transform.localScale.y)
                 {
                     GameScenceController.getGSController().destroyDisk(usingDisks[i]);
+                    GameScenceController.getGSController().subScore();
                 }
             }
             if (usingDisks.Count == 0)
