@@ -4,7 +4,8 @@ using UnityEngine;
 using Com.Manager;
 
 
-public class Scence : MonoBehaviour {
+public class Scence : MonoBehaviour
+{
 
     public int round { get; set; }
     public int diskCount { get; private set; }
@@ -21,20 +22,20 @@ public class Scence : MonoBehaviour {
         this.round = round;
         this.diskCount = round;
         this.diskScale = 1;
-        this.diskSpeed = 4;
+        this.diskSpeed = 0.2f;
         if (round % 2 == 1)
         {
             this.diskColor = Color.red;
             this.startPosition = new Vector3(-5f, 3f, -15f);
-            this.startDiretion = new Vector3(0f, 0f, 0f);
+            this.startDiretion = new Vector3(3f, 5f, 5f);
         }
         else
         {
             this.diskColor = Color.green;
             this.startPosition = new Vector3(5f, 3f, -15f);
-            this.startDiretion = new Vector3(0f, 0f, 0f);
+            this.startDiretion = new Vector3(-3f, 5f, 5f);
         }
-        for (int i = 0; i < round; i++)
+        for (int i = 1; i < round; i++)
         {
             this.diskScale *= 0.8f;
             this.diskSpeed *= 1.1f;
@@ -47,16 +48,24 @@ public class Scence : MonoBehaviour {
         this.Reset(round);
         for (int i = 0; i < usingDisks.Count; i++)
         {
+            Debug.Log("Hello");
             var localScale = usingDisks[i].transform.localScale;
-            usingDisks[i].transform.localScale = new Vector3(localScale.x*diskScale, localScale.y * diskScale, localScale.z * diskScale);
+            usingDisks[i].transform.localScale = new Vector3(localScale.x * diskScale, localScale.y * diskScale, localScale.z * diskScale);
             usingDisks[i].GetComponent<Renderer>().material.color = diskColor;
             usingDisks[i].transform.position = new Vector3(startPosition.x, startPosition.y + i, startPosition.z);
-            usingDisks[i].GetComponent<Rigidbody>().AddForce(startDiretion * Random.Range(diskSpeed * 5, diskSpeed * 10) / 10, ForceMode.Impulse);
+            Rigidbody rigibody;
+            rigibody = usingDisks[i].GetComponent<Rigidbody>();
+            rigibody.WakeUp();
+            rigibody.useGravity = true;
+            rigibody.AddForce(startDiretion * Random.Range(diskSpeed * 5, diskSpeed * 8) / 5, ForceMode.Impulse);
+            GameScenceController.getGSController().setScenceStatus(ScenceStatus.shooting);
         }
     }
 
     public void destroyDisk(GameObject disk)
     {
+        disk.GetComponent<Rigidbody>().Sleep();
+        disk.GetComponent<Rigidbody>().useGravity = false;
         disk.transform.position = new Vector3(0f, -99f, 0f);
     }
 
@@ -68,11 +77,18 @@ public class Scence : MonoBehaviour {
 
     private void Update()
     {
-        for (int i = 0; i < usingDisks.Count; i++)
+        if (usingDisks != null)
         {
-            if (usingDisks[i].transform.position.y < 0)
+            for (int i = 0; i < usingDisks.Count; i++)
             {
-                
+                if (usingDisks[i].transform.position.y <= usingDisks[i].transform.localScale.y)
+                {
+                    GameScenceController.getGSController().destroyDisk(usingDisks[i]);
+                }
+            }
+            if (usingDisks.Count == 0)
+            {
+                GameScenceController.getGSController().setScenceStatus(ScenceStatus.waiting);
             }
         }
     }

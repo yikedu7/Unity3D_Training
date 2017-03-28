@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Com.Manager;
 
 namespace Com.Manager
 {
@@ -29,13 +30,26 @@ namespace Com.Manager
         ScenceStatus queryScenceStatus();
     }
 
-    public class GameScenceController : IUserInterface, IQueryStatus
+    public interface setStatus
+    {
+        void setGameStatus(GameStatus _gameStatus);
+        void setScenceStatus(ScenceStatus _scenceStatus);
+    }
+
+    public interface IScore
+    {
+        void addScore();
+        void subScore();
+        int getScore();
+    }
+
+    public class GameScenceController : IUserInterface, IQueryStatus, setStatus
     {
         public int sendDiskCount { get; private set; }
         private static GameScenceController _gameScenceController;
         private GameStatus _gameStatus;
         private ScenceStatus _scenceStatus;
-        private Scence _scence;
+        public Scence _scence;
         private DiskFactory _diskFactory = DiskFactory.getFactory();
 
         public static GameScenceController getGSController()
@@ -60,18 +74,24 @@ namespace Com.Manager
 
         public GameStatus queryGameStatus() { return _gameStatus; }
         public ScenceStatus queryScenceStatus() { return _scenceStatus; }
+
+        public void setGameStatus(GameStatus _gameStatus) { this._gameStatus = _gameStatus; }
+        public void setScenceStatus(ScenceStatus _scenceStatus) { this._scenceStatus = _scenceStatus; }
     }
 }
 
-public class GameMain : MonoBehaviour {
+public class GameMain : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start()
+    {
+        GameScenceController.getGSController()._scence = this.gameObject.AddComponent<Scence>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }

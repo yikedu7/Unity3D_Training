@@ -5,34 +5,39 @@ using Com.Manager;
 
 namespace Com.Manager
 {
-    public class DiskFactory
+    public class DiskFactory : System.Object
     {
         public GameObject diskPrefab;
 
         private static DiskFactory _diskFactory;
-        List<GameObject> usingDisks = new List<GameObject>();
-        List<GameObject> uselessDisks = new List<GameObject>();
+        List<GameObject> usingDisks;
+        List<GameObject> uselessDisks;
 
         public static DiskFactory getFactory()
         {
             if (_diskFactory == null)
+            {
                 _diskFactory = new DiskFactory();
+                _diskFactory.uselessDisks = new List<GameObject>();
+                _diskFactory.usingDisks = new List<GameObject>();
+            }
             return _diskFactory;
         }
 
-        public List<GameObject> prepareDisks (int diskCount)
+        public List<GameObject> prepareDisks(int diskCount)
         {
             for (int i = 0; i < diskCount; i++)
             {
                 if (uselessDisks.Count == 0)
                 {
-                    uselessDisks[0] = GameObject.Instantiate<GameObject>(diskPrefab);
-                    uselessDisks[0].AddComponent<Renderer>();
+                    GameObject disk = GameObject.Instantiate<GameObject>(diskPrefab);
+                    usingDisks.Add(disk);
                 }
                 else
                 {
-                    usingDisks[i] = uselessDisks[0];
+                    GameObject disk = uselessDisks[0];
                     uselessDisks.RemoveAt(0);
+                    usingDisks.Add(disk);
                 }
             }
             return this.usingDisks;
@@ -45,5 +50,16 @@ namespace Com.Manager
             usingDisks.RemoveAt(index);
         }
     }
+}
 
+public class DiskFactoryMono : MonoBehaviour
+{
+    DiskFactory _diskFactory;
+    public GameObject diskPrefab;
+
+    void Awake()
+    {
+        _diskFactory = DiskFactory.getFactory();
+        _diskFactory.diskPrefab = this.diskPrefab;
+    }
 }
