@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: babef9efc79088f46b41d64c72d5a09e
+timeCreated: 1491431666
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - targetPrefab: {fileID: 1554636132499918, guid: 94caad4e0380cc04287ade7f6bab7196,
+      type: 2}
+  - arrowPrefab: {fileID: 1978647584195982, guid: 00932436eed352440a56184d79edb420,
+      type: 2}
+  - headPrefab: {fileID: 1856975588102194, guid: fd7db7abff11b1b48b559ca8daa57252,
+      type: 2}
+  - wallPrefab: {fileID: 1378034538072630, guid: 8e85e7971fd0a5242ad5520e332d0b96,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
