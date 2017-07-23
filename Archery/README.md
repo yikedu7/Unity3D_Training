@@ -16,7 +16,8 @@
 
 ## 开发过程
 
-	#### (一)构建预设与素材
+#### (一)构建预设与素材
+
 
 ![](http://ompnv884d.bkt.clouddn.com/archery1.JPG)
 
